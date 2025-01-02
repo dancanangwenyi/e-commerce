@@ -2,7 +2,8 @@ plugins {
     id 'java'
     id 'org.springframework.boot' version '3.4.1'
     id 'io.spring.dependency-management' version '1.1.7'
-    id 'org.hidetake.swagger.generator' version '2.18.2'
+    id 'org.hidetake.swagger.generator' version '2.19.2'
+//    id 'org.openapi.generator' version '6.0.0'
 }
 
 group = 'com.example'
@@ -21,56 +22,72 @@ configurations {
 }
 
 repositories {
-    mavenCentral()
+    mavenCentral()  // Ensure Maven Central is included
+    jcenter()       // Also add JCenter as a backup
 }
 
 dependencies {
-
-    //
+    // Swagger and OpenAPI
     swaggerCodegen 'org.openapitools:openapi-generator-cli:4.3.1'
     compileOnly 'io.swagger:swagger-annotations:1.6.2'
     compileOnly 'org.springframework.boot:spring-boot-starter-validation'
     compileOnly 'org.openapitools:jackson-databind-nullable:0.2.1'
     implementation 'com.fasterxml.jackson.dataformat:jackson-dataformat-xml'
     implementation 'org.springframework.boot:spring-boot-starter-hateoas'
-    //
+
+    // Spring Boot and database
     implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
     implementation 'org.springframework.boot:spring-boot-starter-web'
     compileOnly 'org.projectlombok:lombok'
     runtimeOnly 'com.h2database:h2'
     runtimeOnly 'org.postgresql:postgresql'
     annotationProcessor 'org.projectlombok:lombok'
+    implementation 'org.springframework.boot:spring-boot-starter-validation'
+    implementation 'jakarta.validation:jakarta.validation-api:3.0.2'
+    implementation 'jakarta.xml.bind:jakarta.xml.bind-api:3.0.0'
+
+
+    // Testing
     testImplementation 'org.springframework.boot:spring-boot-starter-test'
     testRuntimeOnly 'org.junit.platform:junit-platform-launcher'
 }
 
 swaggerSources {
-
     def typeMappings = 'URI=URI'
     def importMappings = 'URI=java.net.URI'
 
     eStore {
-
-        def apiYaml = "${rootDir}/src/main/resources/api                    /openapi.yaml"
-        def configJson = "${rootDir}/src/main/resources/api                       /config.json"
+        def apiYaml = "${rootDir}/src/main/resources/api/openapi.yaml" as Object
+        def configJson = "${rootDir}/src/main/resources/api/config.json" as Object
         inputFile = file(apiYaml)
-        def ignoreFile = file("${rootDir}/src/main/resources/api                            /.openapi-generator-ignore")
+        def ignoreFile = file("${rootDir}/src/main/resources/api/.openapi-generator-ignore")
 
         code {
-
             language = 'spring'
             configFile = file(configJson)
-            rawOptions = ['--ignore-file-override', ignoreFile, '--type-mappings', typeMappings, '--import-mappings', importMappings] as  List<String>
+            rawOptions = ['--ignore-file-override', ignoreFile, '--type-mappings', typeMappings, '--import-mappings', importMappings] as List<String>
             components = [models: true, apis: true, supportingFiles: 'ApiUtil.java']
-
-            //depends On validation // Should be uncommented once
-            //plugin starts supporting OA 3 validation
-
         }
-
     }
-
 }
+
+// Ensure generated sources are added to the source sets
+sourceSets {
+    main {
+        java {
+            srcDir "${swaggerSources.eStore.code.outputDir}/src/main/java"
+        }
+        resources {
+            srcDir "${swaggerSources.eStore.code.outputDir}/src/main/resources"
+        }
+    }
+}
+
+// Ensure Swagger code is generated before compilation
+tasks.named('compileJava') {
+    dependsOn 'generateSwaggerCodeEStore'
+}
+
 
 tasks.named('test') {
     useJUnitPlatform()

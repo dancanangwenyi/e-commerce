@@ -1,5 +1,4 @@
 {
-
   "library": "spring-mvc",
   "dateLibrary": "java8",
   "hideGenerationTimestamp": true,
@@ -8,12 +7,23 @@
   "invokerPackage": "com.example.ecommerce.api",
   "serializableModel": true,
   "useTags": true,
-  "useGzipFeature" : true,
+  "useGzipFeature": true,
   "hateoas": true,
   "withXml": true,
   "importMappings": {
     "Link": "org.springframework.hateoas.Link"
-
+  },
+  "typeMappings": {
+    "javax.validation.constraints.Valid": "jakarta.validation.constraints.Valid",
+    "javax.validation.constraints.NotNull": "jakarta.validation.constraints.NotNull",
+    "javax.validation.constraints.Size": "jakarta.validation.constraints.Size",
+    "javax.validation.constraints.Pattern": "jakarta.validation.constraints.Pattern",
+    "javax.validation.constraints.Min": "jakarta.validation.constraints.Min",
+    "javax.validation.constraints.Max": "jakarta.validation.constraints.Max",
+    "javax.validation.constraints.DecimalMax": "jakarta.validation.constraints.DecimalMax",
+    "javax.validation.constraints.DecimalMin": "jakarta.validation.constraints.DecimalMin",
+    "javax.validation.constraints.Email": "jakarta.validation.constraints.Email",
+    "javax.validation.constraints.AssertTrue": "jakarta.validation.constraints.AssertTrue",
+    "javax.validation.constraints.AssertFalse": "jakarta.validation.constraints.AssertFalse"
   }
-
 }
