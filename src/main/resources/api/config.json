@@ -1,0 +1,19 @@
+{
+
+  "library": "spring-mvc",
+  "dateLibrary": "java8",
+  "hideGenerationTimestamp": true,
+  "modelPackage": "com.example.ecommerce.api.model",
+  "apiPackage": "com.example.ecommerce.api",
+  "invokerPackage": "com.example.ecommerce.api",
+  "serializableModel": true,
+  "useTags": true,
+  "useGzipFeature" : true,
+  "hateoas": true,
+  "withXml": true,
+  "importMappings": {
+    "Link": "org.springframework.hateoas.Link"
+
+  }
+
+}
