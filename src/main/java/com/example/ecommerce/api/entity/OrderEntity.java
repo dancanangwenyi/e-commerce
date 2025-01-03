@@ -1,6 +1,7 @@
 package com.example.ecommerce.api.entity;
 
 import com.example.ecommerce.api.model.Order;
+import com.example.ecommerce.api.model.Order.StatusEnum;
 import jakarta.persistence.*;
 
 import java.math.BigDecimal;
